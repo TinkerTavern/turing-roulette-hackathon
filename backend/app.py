@@ -8,11 +8,19 @@ def index():
 
 @app.route('/chat')
 def chat():
-    return 'Connecting you to a \'user\'..'
+    return 'This is the chat home'
 
-@app.route('/')
-def hello_world():
-    return 'Hello, World!'
+@app.route('/chat/find')
+def findChat():
+    return 'Looking for a chat...'
+
+# Once chat found, will communicate with Twillio to connect
+# Once ended, will redirect to chat
+
+@app.route('/chat/survey')
+def chatSurvey():
+    return 'This is a chat survey'
+    
 
 if __name__ == '__main__':
     app.run()
