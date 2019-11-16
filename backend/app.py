@@ -42,13 +42,14 @@ def chat():
     return identity
 
 @app.route('/chat/find')
-def findChat(identity):
+def findChat():
     # Put user into "search" mode
     # When another user is found, create channel and invite both.
-    # Chat happens           
+    # Chat happens     
+    identity = str(request.args.get('id'))
     if random.random() < 0.2:
         AIU.append(identity)
-        return
+        return ""
 
     availableU.append(identity)
 
@@ -56,7 +57,7 @@ def findChat(identity):
         channel = client.chat.services(service_sid).channels.create()
         member = client.chat.services (service_sid).channels(channel.sid).members.create(identity=availableU.pop(0))
         member = client.chat.services(service_sid).channels(channel.sid).members.create(identity=availableU.pop(0))
-        return
+        return ""
         
     return 'Please wait'
     
