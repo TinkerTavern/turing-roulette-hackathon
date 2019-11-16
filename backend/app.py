@@ -1,5 +1,6 @@
-from flask import Flask
+from flask import Flask, jsonify, request
 from faker import Faker
+from chatBot import *
 import json
 import os
 import random
@@ -28,17 +29,16 @@ def index():
 
 
 @app.route('/token')
-def token(identity):
+def token():
+    identity = fake.user_name()
     token = AccessToken(account_sid, api_key, api_secret, identity=identity)
     chat_grant = ChatGrant(service_sid)
     token.add_grant(chat_grant)
-    return token
-
+    return jsonify(identity=identity, token=token.to_jwt().decode('utf-8'))
     
     
 @app.route('/chat')
 def chat():
-    identity = fake.user_name()
     return identity
 
 @app.route('/chat/find')
@@ -52,7 +52,7 @@ def findChat(identity):
 
     availableU.append(identity)
 
-    if len(availableU) > 1
+    if len(availableU) > 1:
         channel = client.chat.services(service_sid).channels.create()
         member = client.chat.services (service_sid).channels(channel.sid).members.create(identity=availableU.pop(0))
         member = client.chat.services(service_sid).channels(channel.sid).members.create(identity=availableU.pop(0))
@@ -65,12 +65,12 @@ def findChat(identity):
 
 @app.route('/chat/survey')
 def chatSurvey(choice):
-    if(choice in AIU)
-        if(choice == 'y')
+    if(choice in AIU):
+        if(choice == 'y'):
             return 'Win'
         return 'lose'
-    else
-        if(choice == 'y')
+    else:
+        if(choice == 'y'):
             return 'lose'
         return 'Win'
         

@@ -69,6 +69,3 @@ class bot:
         else:
             flag=False
             print("ROBO: Bye! take care..")
-
-chatty = bot()
-chatty.chat()
