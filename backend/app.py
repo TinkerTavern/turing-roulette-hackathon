@@ -22,7 +22,10 @@ api_key = os.environ['TWILIO_API_KEY']
 api_secret = os.environ['TWILIO_API_SECRET'] 
 auth_token = os.environ['TWILIO_AUTH_TOKEN']
 service_sid = os.environ['TWILIO_CHAT_SERVICE_SID']
+
 client = Client(account_sid, auth_token)
+service = client.chat.services.create(friendly_name='friendly_name')
+
 availableU = []
 AIU = []
 channel = None
@@ -37,6 +40,7 @@ def token():
     token = AccessToken(account_sid, api_key, api_secret, identity=identity)
     chat_grant = ChatGrant(service_sid)
     token.add_grant(chat_grant)
+    
     return jsonify(identity=identity, token=token.to_jwt().decode('utf-8'))
     
     
@@ -59,19 +63,23 @@ def findChat():
         return ""
 
     availableU.append(identity)
-   
-    if len(availableU) <2:
-        channel = client.chat.services(service_sid).channels.create()
-        return {
-            "channelSid": channel.sid
-        }
-    if len(availableU) > 1:
-        member = client.chat.services (service_sid).channels(channel.sid).members.create(identity=availableU.pop(0))
-        member = client.chat.services(service_sid).channels(channel.sid).members.create(identity=availableU.pop(0))
-        return {
-            "channelSid": channel.sid
-        }
-        
+    while (len(availableU)!=0):
+        if len(availableU) == 1:
+            channel = client.chat.services(service_sid).channels.create()
+            return {
+                "channelSid": channel.sid,
+                "serviceSid": service.sid
+
+            }
+        if len(availableU) > 1:
+            member = client.chat.services (service_sid).channels(channel.sid).members.create(identity=availableU.pop(0))
+            member = client.chat.services(service_sid).channels(channel.sid).members.create(identity=availableU.pop(0))            
+      
+            return {
+                "channelSid": channel.sid,
+                "serviceSid": service.sid 
+            }
+            
     return 'Please wait'
     
 # Once chat found, will communicate with Twillio to connect
