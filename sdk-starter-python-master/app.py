@@ -85,15 +85,6 @@ def generateToken(identity):
     # Create access token with credentials
     token = AccessToken(account_sid, api_key, api_secret, identity=identity)
 
-    # Create a Sync grant and add to token
-    if sync_service_sid:
-        sync_grant = SyncGrant(service_sid=sync_service_sid)
-        token.add_grant(sync_grant)
-
-    # Create a Video grant and add to token
-    video_grant = VideoGrant()
-    token.add_grant(video_grant)
-
     # Create an Chat grant and add to token
     if chat_service_sid:
         chat_grant = ChatGrant(service_sid=chat_service_sid)
