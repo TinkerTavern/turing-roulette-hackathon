@@ -25,6 +25,7 @@ service_sid = os.environ['TWILIO_CHAT_SERVICE_SID']
 client = Client(account_sid, auth_token)
 availableU = []
 AIU = []
+channel = None
 @app.route('/')
 def index():
     return 'Welcome to the website'
@@ -45,6 +46,10 @@ def chat():
 
 @app.route('/chat/find')
 def findChat():
+    global channel
+    global availableU
+    global AIU
+    
     # Put user into "search" mode
     # When another user is found, create channel and invite both.
     # Chat happens     
@@ -54,12 +59,18 @@ def findChat():
         return ""
 
     availableU.append(identity)
-
-    if len(availableU) > 1:
+   
+    if len(availableU) <2:
         channel = client.chat.services(service_sid).channels.create()
+        return {
+            "channelSid": channel.sid
+        }
+    if len(availableU) > 1:
         member = client.chat.services (service_sid).channels(channel.sid).members.create(identity=availableU.pop(0))
         member = client.chat.services(service_sid).channels(channel.sid).members.create(identity=availableU.pop(0))
-        return ""
+        return {
+            "channelSid": channel.sid
+        }
         
     return 'Please wait'
     
