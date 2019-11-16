@@ -1,4 +1,5 @@
 from flask import Flask, jsonify, request
+from flask_cors import CORS
 from faker import Faker
 from chatBot import *
 import json
@@ -11,13 +12,14 @@ from dotenv import load_dotenv, find_dotenv
 from os.path import join, dirname
 
 app = Flask(__name__)
+CORS(app)
 fake = Faker()
 dotenv_path = join(dirname(__file__), '.env')
 load_dotenv(dotenv_path)
 
 account_sid = os.environ['TWILIO_ACCOUNT_SID']
 api_key = os.environ['TWILIO_API_KEY']
-api_secret = os.environ['TWILIO_API_Secret'] 
+api_secret = os.environ['TWILIO_API_SECRET'] 
 auth_token = os.environ['TWILIO_AUTH_TOKEN']
 service_sid = os.environ['TWILIO_CHAT_SERVICE_SID']
 client = Client(account_sid, auth_token)
