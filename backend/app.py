@@ -11,7 +11,7 @@ from dotenv import load_dotenv, find_dotenv
 from os.path import join, dirname
 import threading
 import time
-from Mitsuku import *
+from Mitsuku import mitsukuBot
 app = Flask(__name__)
 CORS(app)
 fake = Faker()
