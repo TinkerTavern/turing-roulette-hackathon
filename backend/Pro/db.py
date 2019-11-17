@@ -2,7 +2,7 @@ import sqlite3
 import json
 from datetime import datetime
 
-timeframe = '2019-06'
+timeframe = 'old'
 sql_transaction = []
 
 connection = sqlite3.connect('{}.db'.format(timeframe))
@@ -89,32 +89,45 @@ if __name__ == '__main__':
     create_table()
     row_counter = 0
     paired_rows = 0
+    for i in range (12):
+        for j in range(6,19):
+            if j < 10:
+                yr = "0"+str(j)
+            else:
+                yr = str(j)
+            if i < 10:
+                mn = "0"+str(i)
+            else:
+                mn = str(i)
+            print(yr+" "+mn)
+            try:
+                with open('E:/RC_20{}-{}'.format(yr,mn),'r')as f:
+                    for row in f:
+                        row_counter += 1
+                        row = json.loads(row)
+                        parent_id = row['parent_id'].split("_")[1]
+                        body = format_data(row['body'])
+                        created_utc = row['created_utc']
+                        score = row['score']
+                        comment_id = row['id']
+                        subreddit = row['subreddit']
+                        parent_data = find_parent(parent_id)
+                        if score >= 2:
+                            existing_comment_score = find_existing_score(parent_id)
+                            if existing_comment_score:
+                                if score > existing_comment_score:
+                                    if acceptable(body):
+                                        sql_insert_replace_comment(comment_id,parent_id,parent_data,body,subreddit,created_utc,score)
 
-    with open('E:/RC_2019-06'.format(timeframe.split('-')[0],timeframe), buffering=1000) as f:
-        for row in f:
-            row_counter += 1
-            row = json.loads(row)
-            parent_id = row['parent_id'].split("_")[1]
-            body = format_data(row['body'])
-            created_utc = row['created_utc']
-            score = row['score']
-            comment_id = row['id']
-            subreddit = row['subreddit']
-            parent_data = find_parent(parent_id)
-            if score >= 2:
-                existing_comment_score = find_existing_score(parent_id)
-                if existing_comment_score:
-                    if score > existing_comment_score:
-                        if acceptable(body):
-                            sql_insert_replace_comment(comment_id,parent_id,parent_data,body,subreddit,created_utc,score)
+                            else:
+                                if acceptable(body):
+                                    if parent_data:
+                                        sql_insert_has_parent(comment_id,parent_id,parent_data,body,subreddit,created_utc,score)
+                                        paired_rows += 1
+                                    else:
+                                        sql_insert_no_parent(comment_id,parent_id,body,subreddit,created_utc,score)
 
-                else:
-                    if acceptable(body):
-                        if parent_data:
-                            sql_insert_has_parent(comment_id,parent_id,parent_data,body,subreddit,created_utc,score)
-                            paired_rows += 1
-                        else:
-                            sql_insert_no_parent(comment_id,parent_id,body,subreddit,created_utc,score)
-
-            if row_counter % 100000 == 0:
-                print('Total Rows Read: {}, Paired Rows: {}, Time: {}'.format(row_counter, paired_rows, str(datetime.now())))
+                        if row_counter % 100000 == 0:
+                            print('Total Rows Read: {}, Paired Rows: {}, Time: {}'.format(row_counter, paired_rows, str(datetime.now())))
+            except Exception as e:
+                print("Moving on")
