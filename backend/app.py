@@ -81,7 +81,7 @@ def findChat():
             }
             
     return 'Please wait'
-    
+   
 # Once chat found, will communicate with Twillio to connect
 # Once ended, will redirect to chat
 
@@ -96,6 +96,18 @@ def chatSurvey(choice):
             return 'lose'
         return 'Win'
         
+@app.route('/test')
+def static_file():
+
+    messages = client.chat.services(service_sid).channels('CH34a4b25aec71481aaaba6ba89c68dce6').messages.list(limit=20)
+    for record in messages:
+        print(record.sid,str(record.body) )   
+        
+    message = client.chat.services(service_sid).channels('CH34a4b25aec71481aaaba6ba89c68dce6').messages.create(body='CUNT')
+    print(message.sid,message.body)
+    return "cunt"
+    
+
 
 @app.route('/health')
 def health():
