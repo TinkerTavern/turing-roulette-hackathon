@@ -133,7 +133,7 @@ def aiChat(ch):
                 responses = bot.sendMessage(record.body)
                 for response in responses:
                     time.sleep(random.randint(2,5))
-                    client.chat.services(service_sid).channels(ch).messages.create(body=responses[0])
+                    client.chat.services(service_sid).channels(ch).messages.create(body=responses[0][1:-1])
                     n=n+1
 
 
