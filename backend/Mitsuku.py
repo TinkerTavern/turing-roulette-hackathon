@@ -34,6 +34,3 @@ def mitsukuBot():
             return data['responses']
         else:
             return ""
-
-
-

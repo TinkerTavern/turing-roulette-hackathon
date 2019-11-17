@@ -10,6 +10,8 @@ from twilio.jwt.access_token.grants import ChatGrant
 from dotenv import load_dotenv, find_dotenv
 from os.path import join, dirname
 import threading
+import time
+from Mitsuku import *
 app = Flask(__name__)
 CORS(app)
 fake = Faker()
@@ -58,12 +60,13 @@ def findChat():
     # When another user is found, create channel and invite both.
     # Chat happens     
     identity = str(request.args.get('id'))
-    if random.random() < 0.2:
+    if random.random() < 0.99:
         ch = client.chat.services(service_sid).channels.create()
         Ai.append(identity)
         Ai.append(ch.sid)
         AIU.append(identity)
-        thread1 = threading.Thread(target = aiChat, args=(ch.sid))
+        print(len(ch.sid))
+        thread1 = threading.Thread(target = aiChat, args= [ch.sid])
         thread1.start()
         
         return {
@@ -122,10 +125,28 @@ def static_file():
     print(message.sid,message.body)
     return "worked"
     
-def aiChat():
+def aiChat(ch):
+    print(ch)
+    bot = mitsukuBot()
+    n=0
     while True :
-        pass
+     time.sleep(5)
+     messages = client.chat.services(service_sid).channels(ch).messages.list( limit=250)
+     if len(messages) > n :
+            n = len(message)
+            for record in messages:
+                #message = record.update(from_='bob')
+                responses = sendMessage(record.body)
+                for response in responses:
+                    time.sleep(random.randint(0-5))
+                    been = client.chat.services(service_sid).channels(ch).messages.create(body='send')       
+                    n=n+1
     return
+        
+        
+        
+
+
 
     
 
