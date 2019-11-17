@@ -1,4 +1,4 @@
-from Stacey.aiml.script.bot import smarter()
+from Stacey.aiml.script.bot import smarter
 from Noob import noobBot
 from Mitsuku import mitsukuBot
 import random
@@ -9,7 +9,6 @@ class randBot():
 
     def __init__(self):
         self.mode = 2#4
-        print(self.mode)
         if self.mode == 1:# Noob
             self.bot = noobBot()
             pass
@@ -26,6 +25,3 @@ class randBot():
         
     def sendMessage(self, message):
         return self.bot.sendMessage(message)
-
-aa = randBot()
-print(aa.bot)

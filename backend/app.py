@@ -60,8 +60,7 @@ def findChat():
         Ai.append(identity)
         Ai.append(ch.sid)
         AIU.append(identity)
-        print(len(ch.sid))
-        thread1 = threading.Thread(target = aiChat, args= [ch.sid])
+        thread1 = threading.Thread(target = aiChat, args= [ch.sid, identity])
         thread1.start()
 
         return {
@@ -117,24 +116,27 @@ def chatSurvey(identity, choice):
 def static_file():
     identity = str(request.args.get('id'))
     message = client.chat.services(service_sid).channels(identity).messages.create(body='send')
-    print(message.sid,message.body)
     return "worked"
 
-def aiChat(ch):
+def aiChat(ch, my_identity):
     bot = randBot()
     n=0
+    my_identity = "chat_server"
     while True :
-     messages = client.chat.services(service_sid).channels(ch).messages.list(order="desc", limit=250)
+     messages = client.chat.services(service_sid).channels(ch).messages.list(order="asc", limit=50)
      if len(messages) > n:
             n = len(messages)
+
             for record in messages:
+                if record.from_ == "chat_server":
+                    continue
+
                 #message = record.update(from_='bob')
-                print(record.body)
                 responses = bot.sendMessage(record.body)
-                print(responses)
-                time.sleep(random.randint(2,5))
-                client.chat.services(service_sid).channels(ch).messages.create(body=responses[1:-1])
-                n=n+1
+
+            time.sleep(1)
+            client.chat.services(service_sid).channels(ch).messages.create(body=responses[0].replace("\"", ""))
+            n=n+1
 
 
 @app.route('/health')

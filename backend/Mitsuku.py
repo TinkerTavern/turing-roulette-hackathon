@@ -21,19 +21,19 @@ class mitsukuBot():
         return self.recieveMessages()
 
     def recieveMessages(self):
-        r=requests.post(self.url,headers=self.headers, data = self.data); # requests.post to make a post call to dummy server.
-        #print (r.content)
-        my_json = r.content.decode('utf8').replace("'", '"')
+        r = requests.post(self.url,headers=self.headers, data = self.data) # requests.post to make a post call to dummy server.
+        my_json = r.content.decode('utf-8')
         #
-        #print('- ' * 20)
 
         # Load the JSON to a Python list & dump it back out as formatted JSON
-        data = json.loads(my_json)
+        escaped = my_json.replace("\'", "")
+        data = json.loads(escaped)
 
         if data['status'] == "ok":
             arr = []
             for item in data['responses']:
-                arr.append(json.dumps(item).replace("\""," ").replace("\'"," "))
-            return arr[0]
+                result = json.dumps(item)
+                arr.append(result)
+            return arr
         else:
             return ""
