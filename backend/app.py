@@ -141,7 +141,6 @@ def aiChat(ch):
                     time.sleep(random.randint(0-5))
                     been = client.chat.services(service_sid).channels(ch).messages.create(body='send')       
                     n=n+1
-    return
         
         
         
