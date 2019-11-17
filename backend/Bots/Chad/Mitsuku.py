@@ -1,4 +1,4 @@
-import requests; # requests library to make REST calls
+import requests # requests library to make REST calls
 import json
 
 
@@ -21,7 +21,7 @@ def mitsukuBot():
         return self.recieveMessages(self)
 
     def recieveMessage(self):
-        r=requests.post(url,headers=headers, data = data); # requests.post to make a post call to dummy server. 
+        r=requests.post(url, headers=headers, data=data) # requests.post to make a post call to dummy server.
         #print (r.content)
         my_json = r.content.decode('utf8').replace("'", '"')
         #

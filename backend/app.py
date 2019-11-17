@@ -20,7 +20,7 @@ load_dotenv(dotenv_path)
 
 account_sid = os.environ['TWILIO_ACCOUNT_SID']
 api_key = os.environ['TWILIO_API_KEY']
-api_secret = os.environ['TWILIO_API_SECRET'] 
+api_secret = os.environ['TWILIO_API_SECRET']
 auth_token = os.environ['TWILIO_AUTH_TOKEN']
 service_sid = os.environ['TWILIO_CHAT_SERVICE_SID']
 
@@ -41,24 +41,19 @@ def token():
     token = AccessToken(account_sid, api_key, api_secret, identity=identity)
     chat_grant = ChatGrant(service_sid)
     token.add_grant(chat_grant)
-    
+
     return jsonify(identity=identity, token=token.to_jwt().decode('utf-8'))
-    
-    
-@app.route('/chat')
-def chat():
-    return identity
 
 @app.route('/chat/find')
 def findChat():
     global channel
     global availableU
     global AIU
-    
+
     Ai = []
     # Put user into "search" mode
     # When another user is found, create channel and invite both.
-    # Chat happens     
+    # Chat happens
     identity = str(request.args.get('id'))
     if random.random() < 0.99:
         ch = client.chat.services(service_sid).channels.create()
@@ -68,12 +63,12 @@ def findChat():
         print(len(ch.sid))
         thread1 = threading.Thread(target = aiChat, args= [ch.sid])
         thread1.start()
-        
+
         return {
             "channelSid": ch.sid,
-            "serviceSid": service.sid 
+            "serviceSid": service.sid
         }
-        
+
     availableU.append(identity)
     while (len(availableU)!=0):
         if len(availableU) == 1:
@@ -85,15 +80,15 @@ def findChat():
             }
         if len(availableU) > 1:
             member = client.chat.services (service_sid).channels(channel.sid).members.create(identity=availableU.pop(0))
-            member = client.chat.services(service_sid).channels(channel.sid).members.create(identity=availableU.pop(0))            
-      
+            member = client.chat.services(service_sid).channels(channel.sid).members.create(identity=availableU.pop(0))
+
             return {
                 "channelSid": channel.sid,
-                "serviceSid": service.sid 
+                "serviceSid": service.sid
             }
-            
+
     return 'Please wait'
-   
+
 # Once chat found, will communicate with Twillio to connect
 # Once ended, will redirect to chat
 
@@ -104,7 +99,7 @@ def chatSurvey(identity, choice):
             return {
                 "outcome": "success"
             }
-            
+
         return {
             "outcome": "failure"
         }
@@ -113,18 +108,18 @@ def chatSurvey(identity, choice):
             return {
                 "outcome": "failure"
             }
-            
+
         return {
             "outcome": "success"
         }
-        
+
 @app.route('/test')
 def static_file():
     identity = str(request.args.get('id'))
     message = client.chat.services(service_sid).channels(identity).messages.create(body='send')
     print(message.sid,message.body)
     return "worked"
-    
+
 def aiChat(ch):
     print(ch)
     bot = mitsukuBot()
@@ -138,21 +133,13 @@ def aiChat(ch):
                 responses = bot.sendMessage(record.body)
                 for response in responses:
                     time.sleep(random.randint(2,5))
-                    been = client.chat.services(service_sid).channels(ch).messages.create(body='send')       
+                    client.chat.services(service_sid).channels(ch).messages.create(body=responses[0])
                     n=n+1
-        
-        
-        
 
-
-
-    
-
-    
 
 @app.route('/health')
 def health():
     return ""
-    
+
 if __name__ == '__main__':
-    app.run()
+    app.run(host='0.0.0.0')
