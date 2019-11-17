@@ -43,11 +43,6 @@ def token():
     token.add_grant(chat_grant)
     
     return jsonify(identity=identity, token=token.to_jwt().decode('utf-8'))
-    
-    
-@app.route('/chat')
-def chat():
-    return identity
 
 @app.route('/chat/find')
 def findChat():
@@ -131,29 +126,19 @@ def aiChat(ch):
     n=0
     while True :
      time.sleep(5)
-     messages = client.chat.services(service_sid).channels(ch).messages.list( limit=250)
-     if len(messages) > n :
+     messages = client.chat.services(service_sid).channels(ch).messages.list(order="desc", limit=250)
+     if len(messages) > n:
             n = len(messages)
             for record in messages:
                 #message = record.update(from_='bob')
                 responses = bot.sendMessage(record.body)
-                for response in responses:
-                    time.sleep(random.randint(0-5))
-                    been = client.chat.services(service_sid).channels(ch).messages.create(body='send')       
-                    n=n+1
-        
-        
-        
-
-
-
-    
-
-    
+                time.sleep(random.randint(0,5))
+                client.chat.services(service_sid).channels(ch).messages.create(body=responses[0])
+                n=n+1
 
 @app.route('/health')
 def health():
     return ""
     
 if __name__ == '__main__':
-    app.run()
+    app.run(host='0.0.0.0')
