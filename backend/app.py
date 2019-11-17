@@ -9,7 +9,7 @@ from twilio.jwt.access_token import AccessToken
 from twilio.jwt.access_token.grants import ChatGrant
 from dotenv import load_dotenv, find_dotenv
 from os.path import join, dirname
-
+import threading
 app = Flask(__name__)
 CORS(app)
 fake = Faker()
@@ -53,14 +53,24 @@ def findChat():
     global availableU
     global AIU
     
+    Ai = []
     # Put user into "search" mode
     # When another user is found, create channel and invite both.
     # Chat happens     
     identity = str(request.args.get('id'))
     if random.random() < 0.2:
+        ch = client.chat.services(service_sid).channels.create()
+        Ai.append(identity)
+        Ai.append(ch.sid)
         AIU.append(identity)
-        return ""
-
+        thread1 = threading.Thread(target = aiChat, args=(ch.sid))
+        thread1.start()
+        
+        return {
+            "channelSid": ch.sid,
+            "serviceSid": service.sid 
+        }
+        
     availableU.append(identity)
     while (len(availableU)!=0):
         if len(availableU) == 1:
@@ -85,15 +95,25 @@ def findChat():
 # Once ended, will redirect to chat
 
 @app.route('/chat/survey')
-def chatSurvey(choice):
-    if(choice in AIU):
+def chatSurvey(identity, choice):
+    if(identity in AIU):
         if(choice == 'y'):
-            return 'Win'
-        return 'lose'
+            return {
+                "outcome": "success"
+            }
+            
+        return {
+            "outcome": "failure"
+        }
     else:
         if(choice == 'y'):
-            return 'lose'
-        return 'Win'
+            return {
+                "outcome": "failure"
+            }
+            
+        return {
+            "outcome": "success"
+        }
         
 @app.route('/test')
 def static_file():
@@ -102,7 +122,14 @@ def static_file():
     print(message.sid,message.body)
     return "worked"
     
+def aiChat():
+    while True :
+        pass
+    return
 
+    
+
+    
 
 @app.route('/health')
 def health():
