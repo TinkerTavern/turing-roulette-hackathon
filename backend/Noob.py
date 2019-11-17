@@ -5,7 +5,7 @@ import string
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 
-class bot:
+class noobBot:
 
     def __init__(self):
         f=open('chatbot.txt','r',errors = 'ignore')
@@ -28,10 +28,12 @@ class bot:
         return self.LemTokens(nltk.word_tokenize(text.lower().translate(self.remove_punct_dict)))
 
     def greeting(self, sentence):
-
+        print("My name is Robo. I will answer your queries about Chatbots. If you want to exit, type Bye!")
         for word in sentence.split():
             if word.lower() in self.GREETING_INPUTS:
                 return random.choice(self.GREETING_RESPONSES)
+                
+                
     def response(self, user_response):
         robo_response=''
         self.sent_tokens.append(user_response)
@@ -48,10 +50,22 @@ class bot:
         else:
             robo_response = robo_response+self.sent_tokens[idx]
             return robo_response
+            
+    def sendMessage(self, message):
+        user_response = input()
+        user_response=user_response.lower()
+        if(user_response!='bye'):
+            if(user_response=='thanks' or user_response=='thank you' ):
+                return("You are welcome..")
+            else:
+                if(self.greeting(user_response)!=None):
+                    return(self.greeting(user_response))
+                else:
+                    return(self.response(user_response))
+                    self.sent_tokens.remove(user_response)
 
     def chat(self):
         flag=True
-        print("ROBO: My name is Robo. I will answer your queries about Chatbots. If you want to exit, type Bye!")
         while(flag==True):
             user_response = input()
             user_response=user_response.lower()
