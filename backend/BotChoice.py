@@ -20,7 +20,7 @@ class randBot():
             self.bot = 1
             pass
         else: # Standard
-            bot = 2
+            self.bot = 2
             pass
         return
         
