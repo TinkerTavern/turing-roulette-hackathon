@@ -5,6 +5,8 @@ import random
 
 class randBot():
 
+    bot = None
+
     def __init__(self):
         self.mode = 2#4
         print(self.mode)

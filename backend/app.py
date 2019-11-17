@@ -124,12 +124,14 @@ def aiChat(ch):
     bot = randBot()
     n=0
     while True :
-     messages = client.chat.services(service_sid).channels(ch).messages.list( limit=250)
+     messages = client.chat.services(service_sid).channels(ch).messages.list(order="desc", limit=250)
      if len(messages) > n:
             n = len(messages)
             for record in messages:
                 #message = record.update(from_='bob')
+                print(record.body)
                 responses = bot.sendMessage(record.body)
+                print(responses)
                 time.sleep(random.randint(2,5))
                 client.chat.services(service_sid).channels(ch).messages.create(body=responses[1:-1])
                 n=n+1
