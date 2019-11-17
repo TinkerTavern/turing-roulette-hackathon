@@ -1,7 +1,6 @@
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 from faker import Faker
-from chatBot import *
 import json
 import os
 import random
@@ -29,9 +28,13 @@ service = client.chat.services.create(friendly_name='friendly_name')
 availableU = []
 AIU = []
 channel = None
+
 @app.route('/')
 def index():
-    return 'Welcome to the website'
+    return app.send_static_file('index.html')
+@app.route('/chat/')
+def chat():
+    return app.send_static_file('chat/index.html')
 
 
 @app.route('/token')
@@ -40,47 +43,22 @@ def token():
     token = AccessToken(account_sid, api_key, api_secret, identity=identity)
     chat_grant = ChatGrant(service_sid)
     token.add_grant(chat_grant)
-    
-    return jsonify(identity=identity, token=token.to_jwt().decode('utf-8'))
-    
-    
-@app.route('/chat')
-def chat():
-    return identity
-
-@app.route('/chat/find')
-def findChat():
     global channel
     global availableU
-    global AIU
     
-    # Put user into "search" mode
-    # When another user is found, create channel and invite both.
-    # Chat happens     
-    identity = str(request.args.get('id'))
-    if random.random() < 0.2:
-        AIU.append(identity)
-        return ""
 
     availableU.append(identity)
     while (len(availableU)!=0):
         if len(availableU) == 1:
-            channel = client.chat.services(service_sid).channels.create()
-            return {
-                "channelSid": channel.sid,
-                "serviceSid": service.sid
+            channel = client.chat.services(service_sid).channels.create(unique_name='fuck')
+            member = client.chat.services (service_sid).channels(channel.sid).members.create(identity=availableU[0])
 
-            }
+            return jsonify(identity=identity, token=token.to_jwt().decode('utf-8'),channel=channel.unique_name)
+
         if len(availableU) > 1:
-            member = client.chat.services (service_sid).channels(channel.sid).members.create(identity=availableU.pop(0))
+            a = availableU.pop(0)
             member = client.chat.services(service_sid).channels(channel.sid).members.create(identity=availableU.pop(0))            
-      
-            return {
-                "channelSid": channel.sid,
-                "serviceSid": service.sid 
-            }
-            
-    return 'Please wait'
+            return jsonify(identity=identity, token=token.to_jwt().decode('utf-8'),channel=channel.unique_name)
    
 # Once chat found, will communicate with Twillio to connect
 # Once ended, will redirect to chat
@@ -98,10 +76,14 @@ def chatSurvey(choice):
         
 @app.route('/test')
 def static_file():
-    identity = str(request.args.get('id'))
-    message = client.chat.services(service_sid).channels(identity).messages.create(body='send')
+
+    messages = client.chat.services(service_sid).channels('CH34a4b25aec71481aaaba6ba89c68dce6').messages.list(limit=20)
+    for record in messages:
+        print(record.sid,str(record.body) )   
+        
+    message = client.chat.services(service_sid).channels('CH34a4b25aec71481aaaba6ba89c68dce6').messages.create(body='CUNT')
     print(message.sid,message.body)
-    return "worked"
+    return "cunt"
     
 
 
