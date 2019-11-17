@@ -130,7 +130,6 @@ def aiChat(ch):
     bot = mitsukuBot()
     n=0
     while True :
-     time.sleep(5)
      messages = client.chat.services(service_sid).channels(ch).messages.list( limit=250)
      if len(messages) > n :
             n = len(messages)
@@ -138,7 +137,7 @@ def aiChat(ch):
                 #message = record.update(from_='bob')
                 responses = bot.sendMessage(record.body)
                 for response in responses:
-                    time.sleep(random.randint(0-5))
+                    time.sleep(random.randint(2,5))
                     been = client.chat.services(service_sid).channels(ch).messages.create(body='send')       
                     n=n+1
         

@@ -30,7 +30,9 @@ class mitsukuBot():
 
         # Load the JSON to a Python list & dump it back out as formatted JSON
         data = json.loads(my_json)
-        if data['status'] == "ok":
-            return data['responses']
+        s = json.dumps(data)
+
+        if s['status'] == "ok":
+            return s['responses']
         else:
             return ""
