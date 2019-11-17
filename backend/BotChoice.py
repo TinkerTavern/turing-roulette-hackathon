@@ -5,6 +5,8 @@ import random
 
 class randBot():
 
+    bot = None
+
     def __init__(self):
         self.mode = random.randint(1,2)#4
         print(self.mode)
@@ -23,7 +25,7 @@ class randBot():
         return
         
     def sendMessage(self, message):
-        return bot.sendMessage(message)
+        return self.bot.sendMessage(message)
 
 aa = randBot()
 print(aa.bot)
