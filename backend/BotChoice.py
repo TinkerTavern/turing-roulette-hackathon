@@ -6,7 +6,7 @@ import random
 class randBot():
 
     def __init__(self):
-        self.mode = random.randint(1,4)
+        self.mode = random.randint(1,2)#4
         print(self.mode)
         if self.mode == 1:# Noob
             self.bot = noobBot()

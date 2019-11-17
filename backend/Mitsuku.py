@@ -25,7 +25,6 @@ class mitsukuBot():
         #print (r.content)
         my_json = r.content.decode('utf8').replace("'", '"')
         #
-        print(my_json)
         #print('- ' * 20)
 
         # Load the JSON to a Python list & dump it back out as formatted JSON
@@ -34,7 +33,7 @@ class mitsukuBot():
         if data['status'] == "ok":
             arr = []
             for item in data['responses']:
-                arr.append(json.dumps(item))
-            return arr
+                arr.append(json.dumps(item).replace("\""," ").replace("\'"," "))
+            return arr[0]
         else:
             return ""

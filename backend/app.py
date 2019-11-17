@@ -11,7 +11,7 @@ from dotenv import load_dotenv, find_dotenv
 from os.path import join, dirname
 import threading
 import time
-from Mitsuku import mitsukuBot
+from BotChoice import randBot
 app = Flask(__name__)
 CORS(app)
 fake = Faker()
@@ -121,18 +121,17 @@ def static_file():
     return "worked"
 
 def aiChat(ch):
-    print(ch)
-    bot = mitsukuBot()
+    bot = randBot()
     n=0
     while True :
      messages = client.chat.services(service_sid).channels(ch).messages.list( limit=250)
-     if len(messages) > n :
+     if len(messages) > n:
             n = len(messages)
             for record in messages:
                 #message = record.update(from_='bob')
                 responses = bot.sendMessage(record.body)
                 time.sleep(random.randint(2,5))
-                client.chat.services(service_sid).channels(ch).messages.create(body=responses[0][1:-1])
+                client.chat.services(service_sid).channels(ch).messages.create(body=responses[1:-1])
                 n=n+1
 
 
