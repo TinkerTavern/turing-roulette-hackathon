@@ -18,12 +18,12 @@ class randBot():
             self.bot = 1
             pass
         else: # Standard
-            bot = 2
+            self.bot = 2
             pass
         return
         
     def sendMessage(self, message):
-        return bot.sendMessage(message)
+        return self.bot.sendMessage(message)
 
 aa = randBot()
 print(aa.bot)
