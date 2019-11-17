@@ -1,7 +1,6 @@
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 from faker import Faker
-from chatBot import *
 import json
 import os
 import random
