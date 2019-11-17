@@ -18,7 +18,7 @@ class mitsukuBot():
                     ,"botkey": "n0M6dW2XZacnOgCWTp0FRYUuMjSfCkJGgobNpgPv9060_72eKnu3Yl-o1v2nFGtSXqfwJBG2Ros~"
                     ,"client_name": "cw16e77bebb2d"}
 
-        return self.recieveMessages(self)
+        return self.recieveMessages()
 
     def recieveMessages(self):
         r=requests.post(url,headers=headers, data = data); # requests.post to make a post call to dummy server. 
