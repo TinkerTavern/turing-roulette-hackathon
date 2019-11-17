@@ -131,10 +131,9 @@ def aiChat(ch):
             for record in messages:
                 #message = record.update(from_='bob')
                 responses = bot.sendMessage(record.body)
-                for response in responses:
-                    time.sleep(random.randint(2,5))
-                    client.chat.services(service_sid).channels(ch).messages.create(body=responses[0][1:-1])
-                    n=n+1
+                time.sleep(random.randint(2,5))
+                client.chat.services(service_sid).channels(ch).messages.create(body=responses[0][1:-1])
+                n=n+1
 
 
 @app.route('/health')
