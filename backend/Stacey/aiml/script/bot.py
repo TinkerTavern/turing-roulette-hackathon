@@ -15,16 +15,18 @@ class smarter():
 
 
     def __init__(self, mode):
+            # Create a Kernel object. No string encoding (all I/O is unicode)
+        self.kern = aiml.Kernel()
+        self.kern.setTextEncoding( None )
 
         if mode == "standard":
             chdir = os.path.join( aiml.__path__[0],'botdata','standard' )
-            kern.bootstrap(learnFiles="startup.xml", commands="load aiml b",
+            self.kern.bootstrap(learnFiles="startup.xml", commands="load aiml b",
                            chdir=chdir)
         else:
             chdir = os.path.join( aiml.__path__[0],'botdata','alice' )
-            kern.bootstrap(learnFiles="startup.xml", commands="load alice",
+            self.kern.bootstrap(learnFiles="startup.xml", commands="load alice",
                            chdir=chdir)
 
     def sendMessage(self, message):
-        return kern.respond(message)
-
+        return self.kern.respond(message)
