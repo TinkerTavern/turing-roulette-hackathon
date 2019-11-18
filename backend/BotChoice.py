@@ -8,7 +8,7 @@ class randBot():
     bot = None
 
     def __init__(self):
-        self.mode = 2#4
+        self.mode = random.randint(2,4)
         if self.mode == 1:# Noob
             self.bot = noobBot()
             pass
@@ -22,6 +22,6 @@ class randBot():
             self.bot = smarter("standard")
             pass
         return
-        
+
     def sendMessage(self, message):
         return self.bot.sendMessage(message)
