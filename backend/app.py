@@ -135,7 +135,7 @@ def aiChat(ch, my_identity):
                 responses = bot.sendMessage(record.body)
 
             time.sleep(1)
-            client.chat.services(service_sid).channels(ch).messages.create(body=responses[0].replace("\"", ""))
+            client.chat.services(service_sid).channels(ch).messages.create(body=responses.replace("\"", ""))
             n=n+1
 
 
