@@ -9,7 +9,7 @@ Django==2.2.13
 djangorestframework==3.10.3
 dnspython==1.16.0
 email-validator==1.0.4
-fastapi==0.38.1
+fastapi==0.65.2
 ffmpy==0.2.2
 Flask==1.1.1
 flask-cors==3.0.7
