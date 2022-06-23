@@ -55,5 +55,5 @@ tldextract==2.2.1
 twilio==6.33.1
 urllib3==1.25.3
 uvicorn==0.8.6
-websockets==7.0
+websockets==9.1
 Werkzeug==0.16.0
