@@ -28,7 +28,7 @@ ndg-httpsclient==0.5.1
 nltk==3.4.5
 numpy==1.22.0
 pandas==0.25.1
-py==1.8.0
+py==1.10.0
 pyasn1==0.4.7
 pycparser==2.19
 pydantic==0.32.2
