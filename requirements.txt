@@ -50,7 +50,7 @@ sklearn==0.0
 sounddevice==0.3.13
 SpeechRecognition==3.8.1
 sqlparse==0.3.0
-starlette==0.12.8
+starlette==0.25.0
 tldextract==2.2.1
 twilio==6.33.1
 urllib3==1.26.5
